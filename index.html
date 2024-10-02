@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced EditorConfig Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        pre {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            margin-top: 20px;
+        }
+
+        #download-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #download-link a {
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 10px 20px;
+            border-radius: 4px;
+        }
+
+        #download-link a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Advanced EditorConfig Generator</h1>
+
+    <label for="indent-style">Indent Style:</label>
+    <select id="indent-style" onchange="updatePreview()">
+        <option value="space">space</option>
+        <option value="tab">tab</option>
+    </select>
+
+    <label for="indent-size">Indent Size:</label>
+    <input type="text" id="indent-size" placeholder="Ex: 2, 4" oninput="updatePreview()">
+
+    <label for="end-of-line">End of Line:</label>
+    <select id="end-of-line" onchange="updatePreview()">
+        <option value="lf">LF (Linux/Mac)</option>
+        <option value="crlf">CRLF (Windows)</option>
+    </select>
+
+    <label for="charset">Charset:</label>
+    <select id="charset" onchange="updatePreview()">
+        <option value="utf-8">UTF-8</option>
+        <option value="utf-16">UTF-16</option>
+        <option value="latin1">Latin1</option>
+    </select>
+
+    <label for="trim-trailing-whitespace">Trim Trailing Whitespace:</label>
+    <select id="trim-trailing-whitespace" onchange="updatePreview()">
+        <option value="true">true</option>
+        <option value="false">false</option>
+    </select>
+
+    <label for="insert-final-newline">Insert Final Newline:</label>
+    <select id="insert-final-newline" onchange="updatePreview()">
+        <option value="true">true</option>
+        <option value="false">false</option>
+    </select>
+
+    <button onclick="downloadEditorConfig()">Download .editorconfig</button>
+
+    <h2>Preview</h2>
+    <pre id="config-preview">
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+    </pre>
+
+    <div id="download-link"></div>
+</div>
+
+<script>
+    function updatePreview() {
+        const indentStyle = document.getElementById('indent-style').value;
+        const indentSize = document.getElementById('indent-size').value || '4'; // Padrão 4 se vazio
+        const endOfLine = document.getElementById('end-of-line').value;
+        const charset = document.getElementById('charset').value;
+        const trimTrailingWhitespace = document.getElementById('trim-trailing-whitespace').value;
+        const insertFinalNewline = document.getElementById('insert-final-newline').value;
+
+        const editorConfigContent = `
+root = true
+
+[*]
+indent_style = ${indentStyle}
+indent_size = ${indentSize}
+end_of_line = ${endOfLine}
+charset = ${charset}
+trim_trailing_whitespace = ${trimTrailingWhitespace}
+insert_final_newline = ${insertFinalNewline}
+        `.trim();
+
+        document.getElementById('config-preview').textContent = editorConfigContent;
+    }
+
+    function downloadEditorConfig() {
+        const editorConfigContent = document.getElementById('config-preview').textContent;
+
+        const blob = new Blob([editorConfigContent], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+
+        const downloadLink = document.getElementById('download-link');
+        downloadLink.innerHTML = `<a href="${url}" download=".editorconfig">Download .editorconfig</a>`;
+    }
+
+    updatePreview();
+</script>
+
+</body>
+</html>
